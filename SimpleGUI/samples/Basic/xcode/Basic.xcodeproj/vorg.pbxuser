@@ -1,0 +1,170 @@
+// !$*UTF8*$!
+{
+	00BAE6590E7ED9C10018A608 /* BasicApp.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1547}}";
+			sepNavSelRange = "{0, 3337}";
+			sepNavVisRange = "{0, 917}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 93B7B16812510A8D00E6AEC4 /* Basic */;
+		activeTarget = 8D1107260486CEB800E47090 /* Basic */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* Basic */,
+		);
+		codeSenseManager = 93B7B19A12510AA300E6AEC4 /* Code sense */;
+		executables = (
+			93B7B16812510A8D00E6AEC4 /* Basic */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					993,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 317489262;
+			PBXWorkspaceStateSaveDate = 317489262;
+		};
+		perUserProjectItems = {
+			933A2D9E12EC81E300009A7C /* PBXTextBookmark */ = 933A2D9E12EC81E300009A7C /* PBXTextBookmark */;
+			933A2DC312EC839D00009A7C /* PBXTextBookmark */ = 933A2DC312EC839D00009A7C /* PBXTextBookmark */;
+			933A2DC412EC839D00009A7C /* PBXTextBookmark */ = 933A2DC412EC839D00009A7C /* PBXTextBookmark */;
+			93F9F2DF12525D3B00EA2D49 /* PBXTextBookmark */ = 93F9F2DF12525D3B00EA2D49 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 93B7B19912510AA300E6AEC4 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	8D1107260486CEB800E47090 /* Basic */ = {
+		activeExec = 0;
+		executables = (
+			93B7B16812510A8D00E6AEC4 /* Basic */,
+		);
+	};
+	933A2D9E12EC81E300009A7C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 93B6998712EC7F1500170DAF /* SimpleGUI.h */;
+		name = "SimpleGUI.h: 130";
+		rLen = 0;
+		rLoc = 3229;
+		rType = 0;
+		vrLen = 919;
+		vrLoc = 0;
+	};
+	933A2DC312EC839D00009A7C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 93B699C812EC7F1500170DAF /* SimpleGUI.cpp */;
+		name = "SimpleGUI.cpp: 376";
+		rLen = 0;
+		rLoc = 10002;
+		rType = 0;
+		vrLen = 1053;
+		vrLoc = 9665;
+	};
+	933A2DC412EC839D00009A7C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 93B699C812EC7F1500170DAF /* SimpleGUI.cpp */;
+		name = "SimpleGUI.cpp: 376";
+		rLen = 0;
+		rLoc = 10002;
+		rType = 0;
+		vrLen = 991;
+		vrLoc = 9665;
+	};
+	93B6998712EC7F1500170DAF /* SimpleGUI.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 3692}}";
+			sepNavSelRange = "{3229, 0}";
+			sepNavVisRange = "{0, 919}";
+		};
+	};
+	93B699C812EC7F1500170DAF /* SimpleGUI.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {803, 10179}}";
+			sepNavSelRange = "{7482, 0}";
+			sepNavVisRange = "{7357, 395}";
+		};
+	};
+	93B7B16812510A8D00E6AEC4 /* Basic */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = Basic;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	93B7B19912510AA300E6AEC4 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	93B7B19A12510AA300E6AEC4 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	93F9F1BB1252224B00EA2D49 /* backward_warning.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = backward_warning.h;
+		path = "/Developer/SDKs/MacOSX10.6.sdk/usr/include/c++/4.2.1/backward/backward_warning.h";
+		sourceTree = "<absolute>";
+	};
+	93F9F2DF12525D3B00EA2D49 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 93F9F1BB1252224B00EA2D49 /* backward_warning.h */;
+		name = "backward_warning.h: 32";
+		rLen = 0;
+		rLoc = 1479;
+		rType = 0;
+		vrLen = 1857;
+		vrLoc = 0;
+	};
+}

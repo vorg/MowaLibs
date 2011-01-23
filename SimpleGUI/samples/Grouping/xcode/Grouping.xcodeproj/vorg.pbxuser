@@ -1,0 +1,162 @@
+// !$*UTF8*$!
+{
+	00BAE6590E7ED9C10018A608 /* GroupingApp.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1872}}";
+			sepNavSelRange = "{495, 0}";
+			sepNavVisRange = "{398, 1319}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 933A2DBF12EC839600009A7C /* Grouping */;
+		activeTarget = 8D1107260486CEB800E47090 /* Grouping */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* Grouping */,
+		);
+		codeSenseManager = 933A2DC612EC83B500009A7C /* Code sense */;
+		executables = (
+			933A2DBF12EC839600009A7C /* Grouping */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					993,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 317494755;
+			PBXWorkspaceStateSaveDate = 317494755;
+		};
+		perUserProjectItems = {
+			9318A6E012EC9799006FF59E /* PBXTextBookmark */ = 9318A6E012EC9799006FF59E /* PBXTextBookmark */;
+			9318A6F712EC9889006FF59E /* PBXTextBookmark */ = 9318A6F712EC9889006FF59E /* PBXTextBookmark */;
+			933A2EBF12EC88C200009A7C /* PBXTextBookmark */ = 933A2EBF12EC88C200009A7C /* PBXTextBookmark */;
+		};
+		sourceControlManager = 933A2DC512EC83B500009A7C /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	8D1107260486CEB800E47090 /* Grouping */ = {
+		activeExec = 0;
+		executables = (
+			933A2DBF12EC839600009A7C /* Grouping */,
+		);
+	};
+	9318A6E012EC9799006FF59E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 933A2E8D12EC84E700009A7C /* GroupingApp.cpp */;
+		name = "GroupingApp.cpp: 58";
+		rLen = 8;
+		rLoc = 1600;
+		rType = 0;
+		vrLen = 1451;
+		vrLoc = 697;
+	};
+	9318A6F712EC9889006FF59E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 00BAE6590E7ED9C10018A608 /* GroupingApp.cpp */;
+		name = "GroupingApp.cpp: 26";
+		rLen = 0;
+		rLoc = 495;
+		rType = 0;
+		vrLen = 1319;
+		vrLoc = 398;
+	};
+	933A2DBF12EC839600009A7C /* Grouping */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = Grouping;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	933A2DC512EC83B500009A7C /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	933A2DC612EC83B500009A7C /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	933A2DCB12EC83DC00009A7C /* SimpleGUI.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 3783}}";
+			sepNavSelRange = "{2890, 7}";
+			sepNavVisRange = "{2504, 891}";
+		};
+	};
+	933A2E3312EC83DC00009A7C /* SimpleGUI.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 10309}}";
+			sepNavSelRange = "{1791, 0}";
+			sepNavVisRange = "{1231, 1811}";
+		};
+	};
+	933A2E8D12EC84E700009A7C /* GroupingApp.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = GroupingApp.cpp;
+		path = "/Users/vorg/Workspace/cinder-mowalibs/SimpleGUI/samples/Grouping/xcode/../src/GroupingApp.cpp";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1171, 1872}}";
+			sepNavSelRange = "{495, 0}";
+			sepNavVisRange = "{398, 1319}";
+		};
+	};
+	933A2EBF12EC88C200009A7C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 933A2DCB12EC83DC00009A7C /* SimpleGUI.h */;
+		name = "SimpleGUI.h: 105";
+		rLen = 7;
+		rLoc = 2890;
+		rType = 0;
+		vrLen = 891;
+		vrLoc = 2504;
+	};
+}
