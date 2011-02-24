@@ -235,12 +235,12 @@ public:
 	void onMouseDown(MouseEvent event);
 	void onMouseUp(MouseEvent event);
 
-	//! Registers a callback for mouseUp events. Returns a unique identifier which can be used as a parameter to unregisterMouseUp().
+	//! Registers a callback for Click events. Returns a unique identifier which can be used as a parameter to unregisterClick().
 	CallbackId		registerClick( std::function<bool (MouseEvent)> callback ) { return callbacksClick.registerCb( callback ); }
-	//! Registers a callback for mouseUp events. Returns a unique identifier which can be used as a parameter to unregisterMouseUp().
+	//! Registers a callback for Click events. Returns a unique identifier which can be used as a parameter to unregisterClick().
 	template<typename T>
 	CallbackId		registerClick( T *obj, bool (T::*callback)(MouseEvent) ) { return callbacksClick.registerCb( std::bind1st( std::mem_fun( callback ), obj ) ); }
-	//! Unregisters a callback for mouseUp events.
+	//! Unregisters a callback for Click events.
 	void			unregisterClick( CallbackId id ) { callbacksClick.unregisterCb( id ); }
 
 	void fireClick();

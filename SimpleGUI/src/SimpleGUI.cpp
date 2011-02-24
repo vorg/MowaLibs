@@ -685,10 +685,10 @@ Vec2f ButtonControl::draw(Vec2f pos) {
 					  );
 	
 	
-	gl::color(pressed ? SimpleGUI::textColor : SimpleGUI::darkColor);
+	gl::color(pressed ? SimpleGUI::lightColor : SimpleGUI::darkColor);
 	gl::drawSolidRect(activeArea);				
 	gl::drawString(name, Vec2f(pos.x + SimpleGUI::padding.x * 2, pos.y + floor(SimpleGUI::padding.y * 0.5)), pressed ? SimpleGUI::darkColor : SimpleGUI::textColor, SimpleGUI::textFont);					
-	pos.y += SimpleGUI::sliderSize.y + SimpleGUI::spacing + SimpleGUI::padding.y * 2;		
+	pos.y += SimpleGUI::sliderSize.y + SimpleGUI::spacing + SimpleGUI::padding.y;
 	return pos;
 }
 	
@@ -815,7 +815,7 @@ Vec2f TextureVarControl::draw(Vec2f pos) {
 	));
 	gl::color(ColorA(1,1,1,1));
 	gl::draw(*var, activeArea);	
-	pos.y += activeArea.getHeight() - SimpleGUI::padding.y * 2 + SimpleGUI::spacing;
+	pos.y += activeArea.getHeight() + SimpleGUI::spacing;
 	return pos;	
 }
 	
