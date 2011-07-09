@@ -40,6 +40,8 @@ namespace mowa { namespace sgui {
 //-----------------------------------------------------------------------------
 
 Font SimpleGUI::textFont = Font();
+gl::TextureFontRef SimpleGUI::textureFont = gl::TextureFontRef();
+Vec2f SimpleGUI::textOffset = Vec2f(0, 8);
 ColorA SimpleGUI::darkColor = ColorA(0.3, 0.3, 0.3, 1);
 ColorA SimpleGUI::lightColor = ColorA(1, 1, 1, 1);
 ColorA SimpleGUI::bgColor = ColorA(0, 0, 0, 0.5);
@@ -58,6 +60,7 @@ SimpleGUI::SimpleGUI(App* app) {
 void SimpleGUI::init(App* app) {	
 	textFont = Font(loadResource("pf_tempesta_seven.ttf"), 8);
 	//textFont = Font("Arial", 12);
+    textureFont = gl::TextureFont::create( textFont );
 	selectedControl = NULL;
 	cbMouseDown = app->registerMouseDown( this, &SimpleGUI::onMouseDown );
 	cbMouseUp = app->registerMouseUp( this, &SimpleGUI::onMouseUp );	
@@ -358,7 +361,9 @@ Vec2f FloatVarControl::draw(Vec2f pos) {
 		(pos + SimpleGUI::labelSize + SimpleGUI::sliderSize + SimpleGUI::padding*2).y)
 	);	
 	
-	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);
+//	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);
+    gl::color(SimpleGUI::textColor);
+    SimpleGUI::textureFont->drawString(name, pos + SimpleGUI::textOffset);
 	
 	gl::color(SimpleGUI::darkColor);
 	gl::drawSolidRect(activeArea);
@@ -436,7 +441,9 @@ Vec2f IntVarControl::draw(Vec2f pos) {
 							(pos + SimpleGUI::labelSize + SimpleGUI::sliderSize + SimpleGUI::padding*2).y)
 					  );	
 	
-	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);
+//	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);
+    gl::color(SimpleGUI::textColor);
+    SimpleGUI::textureFont->drawString(name, pos + SimpleGUI::textOffset);
 	
 	gl::color(SimpleGUI::darkColor);
 	gl::drawSolidRect(activeArea);
@@ -487,7 +494,9 @@ Vec2f BoolVarControl::draw(Vec2f pos) {
 		(pos + SimpleGUI::sliderSize + SimpleGUI::padding).x, 
 		(pos + SimpleGUI::sliderSize + SimpleGUI::padding).y)
 	);
-	gl::drawString(name, Vec2f(pos.x + SimpleGUI::sliderSize.y + SimpleGUI::padding.x*2, pos.y), SimpleGUI::textColor, SimpleGUI::textFont);					
+//	gl::drawString(name, Vec2f(pos.x + SimpleGUI::sliderSize.y + SimpleGUI::padding.x*2, pos.y), SimpleGUI::textColor, SimpleGUI::textFont);					
+    gl::color(SimpleGUI::textColor);
+    SimpleGUI::textureFont->drawString(name, Vec2f(pos.x + SimpleGUI::sliderSize.y + SimpleGUI::padding.x*2, pos.y) + SimpleGUI::textOffset);    
 	gl::color((*var) ? SimpleGUI::lightColor : SimpleGUI::darkColor);
 	gl::drawSolidRect(activeArea);
 	pos.y += SimpleGUI::sliderSize.y + SimpleGUI::spacing;	
@@ -585,7 +594,10 @@ Vec2f ColorVarControl::draw(Vec2f pos) {
 		(pos + SimpleGUI::labelSize + SimpleGUI::sliderSize*4 + SimpleGUI::padding*5).y)
 	);
 	
-	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);	
+//	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);	
+    gl::color(SimpleGUI::textColor);
+    SimpleGUI::textureFont->drawString(name, pos + SimpleGUI::textOffset);
+    
 	gl::color(SimpleGUI::darkColor);
 	gl::drawSolidRect(activeArea1);
 	gl::drawSolidRect(activeArea2);
@@ -687,7 +699,10 @@ Vec2f ButtonControl::draw(Vec2f pos) {
 	
 	gl::color(pressed ? SimpleGUI::lightColor : SimpleGUI::darkColor);
 	gl::drawSolidRect(activeArea);				
-	gl::drawString(name, Vec2f(pos.x + SimpleGUI::padding.x * 2, pos.y + floor(SimpleGUI::padding.y * 0.5)), pressed ? SimpleGUI::darkColor : SimpleGUI::textColor, SimpleGUI::textFont);					
+//	gl::drawString(name, Vec2f(pos.x + SimpleGUI::padding.x * 2, pos.y + floor(SimpleGUI::padding.y * 0.5)), pressed ? SimpleGUI::darkColor : SimpleGUI::textColor, SimpleGUI::textFont);					
+    gl::color(pressed ? SimpleGUI::darkColor : SimpleGUI::textColor);
+    SimpleGUI::textureFont->drawString(name, Vec2f(pos.x + SimpleGUI::padding.x * 2, pos.y + floor(SimpleGUI::padding.y * 0.5)) + SimpleGUI::textOffset);
+    
 	pos.y += SimpleGUI::sliderSize.y + SimpleGUI::spacing + SimpleGUI::padding.y;
 	return pos;
 }
@@ -732,8 +747,10 @@ Vec2f LabelControl::draw(Vec2f pos) {
 		(pos - SimpleGUI::padding).y, 
 		(pos + SimpleGUI::sliderSize + SimpleGUI::padding).x, 
 		(pos + SimpleGUI::labelSize + SimpleGUI::padding).y
-	));				
-	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);					
+	));	    
+//	gl::drawString(name, pos, SimpleGUI::textColor, SimpleGUI::textFont);					
+    gl::color(SimpleGUI::textColor);
+    SimpleGUI::textureFont->drawString(name, pos + SimpleGUI::textOffset);
 	pos.y += SimpleGUI::labelSize.y + SimpleGUI::spacing;		
 	return pos;
 }

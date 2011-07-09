@@ -31,6 +31,7 @@
 #include "cinder/app/App.h"
 #include "cinder/Text.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/gl/TextureFont.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -75,7 +76,9 @@ public:
 	static Vec2f sliderSize;
 	static Vec2f labelSize;
 	static Vec2f separatorSize;
+	static Vec2f textOffset;
 	static Font textFont;
+    static gl::TextureFontRef textureFont;
 	
 	enum {
 		RGB,

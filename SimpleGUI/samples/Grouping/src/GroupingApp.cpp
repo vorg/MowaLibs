@@ -1,4 +1,4 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
 #include "cinder/gl/FBO.h"
 #include "SimpleGUI.h"
 #include <list>
@@ -10,7 +10,7 @@ using namespace mowa::sgui;
 #define RENDER_TYPE_GROUP 1
 #define CONFIG_FILE "settings.sgui.txt"
 
-class GroupingApp : public AppBasic {
+class GroupingApp : public AppNative {
 private:
 	SimpleGUI* gui;
 	PanelControl* strokePanel;
@@ -28,6 +28,9 @@ private:
 	gl::Fbo fbo;
 	
 public:
+#if defined( CINDER_GLES )
+    void prepareSettings( Settings *settings );
+#endif
 	void mouseDown( MouseEvent event );
 	void mouseDrag( MouseEvent event );
 	void mouseUp( MouseEvent event );
@@ -36,7 +39,15 @@ public:
 	void setup();
 };
 
-void GroupingApp::setup() {
+#if defined( CINDER_GLES )
+void GroupingApp::prepareSettings( Settings *settings )
+{
+    // use MouseEvent simulation on iOS:
+    settings->enableMultiTouch(false);
+}
+#endif
+
+void GroupingApp::setup() {    
 	fbo = gl::Fbo(getWindowWidth(), getWindowHeight());
 	
 	gui = new SimpleGUI(this);
@@ -90,6 +101,10 @@ void GroupingApp::keyDown( KeyEvent event ) {
 }
 
 void GroupingApp::draw() {
+    
+    gl::clear(ColorA(0.2, 0.2, 0.2, 1.0));
+    gl::setMatricesWindow( getWindowSize() );
+    
 	float currTime = timer.getSeconds();
 	float deltaTime = currTime - prevTime;
 	prevTime = currTime;
@@ -98,47 +113,54 @@ void GroupingApp::draw() {
 		rotation += deltaTime * 60;
 		rotation = fmod(rotation, 360);
 	}
-	
-	fbo.bindFramebuffer();
-	
-	gl::pushMatrices();
-	gl::clear(ColorA(0.2, 0.2, 0.2, 1.0));
-	gl::translate(Vec2f(getWindowWidth()/2, getWindowHeight()/2));
-	gl::rotate(rotation);
-	gl::color(color);
-	gl::enableAlphaBlending();
-	gl::disableDepthRead();
-	
-	if (fill) {
-		gl::translate(Vec2f(-50, -50));
-		gl::drawSolidRect(Rectf(-size/2, -size/2, size/2, size/2));
-		gl::translate(Vec2f(+100, +100));
-		gl::drawSolidRect(Rectf(-size/2, -size/2, size/2, size/2));
-	}
-	else if (stroke) {
-		glLineWidth(thickness);
-		gl::translate(Vec2f(-50, -50));
-		gl::drawLine(Vec2f(-size/2, -size/2), Vec2f( size/2, -size/2));
-		gl::drawLine(Vec2f( size/2, -size/2), Vec2f( size/2,  size/2));
-		gl::drawLine(Vec2f( size/2,  size/2), Vec2f(-size/2,  size/2));
-		gl::drawLine(Vec2f(-size/2,  size/2), Vec2f(-size/2, -size/2));		
-		gl::translate(Vec2f(+100, +100));
-		gl::drawLine(Vec2f(-size/2, -size/2), Vec2f( size/2, -size/2));
-		gl::drawLine(Vec2f( size/2, -size/2), Vec2f( size/2,  size/2));
-		gl::drawLine(Vec2f( size/2,  size/2), Vec2f(-size/2,  size/2));
-		gl::drawLine(Vec2f(-size/2,  size/2), Vec2f(-size/2, -size/2));
-		glLineWidth(1);
-	}
-	gl::popMatrices();	
-	
-	fbo.unbindFramebuffer();
-	
-	gl::color(ColorA(1,1,1,1));
+
+	{
+        // (from FBOBasic Cinder sample)
+        // this will restore the old framebuffer binding when we leave this function
+        // on non-OpenGL ES platforms, you can just call mFbo.unbindFramebuffer() at the end of the function
+        // but this will restore the "screen" FBO on OpenGL ES, and does the right thing on both platforms
+        gl::SaveFramebufferBinding bindingSaver;        
+
+        fbo.bindFramebuffer();
+        
+        gl::pushMatrices();
+        gl::clear(ColorA(0.2, 0.2, 0.2, 1.0));
+        gl::translate(Vec2f(getWindowWidth()/2, getWindowHeight()/2));
+        gl::rotate(rotation);
+        gl::color(color);
+        gl::enableAlphaBlending();
+        gl::disableDepthRead();
+        
+        if (fill) {
+            gl::translate(Vec2f(-50, -50));
+            gl::drawSolidRect(Rectf(-size/2, -size/2, size/2, size/2));
+            gl::translate(Vec2f(+100, +100));
+            gl::drawSolidRect(Rectf(-size/2, -size/2, size/2, size/2));
+        }
+        else if (stroke) {
+            glLineWidth(thickness);
+            gl::translate(Vec2f(-50, -50));
+            gl::drawLine(Vec2f(-size/2, -size/2), Vec2f( size/2, -size/2));
+            gl::drawLine(Vec2f( size/2, -size/2), Vec2f( size/2,  size/2));
+            gl::drawLine(Vec2f( size/2,  size/2), Vec2f(-size/2,  size/2));
+            gl::drawLine(Vec2f(-size/2,  size/2), Vec2f(-size/2, -size/2));		
+            gl::translate(Vec2f(+100, +100));
+            gl::drawLine(Vec2f(-size/2, -size/2), Vec2f( size/2, -size/2));
+            gl::drawLine(Vec2f( size/2, -size/2), Vec2f( size/2,  size/2));
+            gl::drawLine(Vec2f( size/2,  size/2), Vec2f(-size/2,  size/2));
+            gl::drawLine(Vec2f(-size/2,  size/2), Vec2f(-size/2, -size/2));
+            glLineWidth(1);
+        }
+        gl::popMatrices();	
+        
+    //	fbo.unbindFramebuffer();
+    }
+    
+    gl::color(ColorA(1,1,1,1));
 	gl::draw(fbo.getTexture());
 	
 	strokePanel->enabled = stroke ? true : false;
 	gui->draw();
 }
 
-
-CINDER_APP_BASIC( GroupingApp, RendererGl )
+CINDER_APP_NATIVE( GroupingApp, RendererGl(0) )

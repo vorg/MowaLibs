@@ -1,5 +1,13 @@
+# Windows cruft
+*.suo
+*.ncb
+*.sdf
+Debug/
+Release/
+
 # xcode noise
 *.mode1v3
+*.mode2v3
 *.pbxuser
 *.perspective 
 *.perspectivev3
@@ -7,6 +15,9 @@
 *~.nib/
 build
 build/*     
+*.user
+*.xcworkspace/
+xcuserdata/
 
 # osx noise
 .DS_Store
