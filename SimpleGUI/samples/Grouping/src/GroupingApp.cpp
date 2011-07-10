@@ -43,7 +43,7 @@ public:
 void GroupingApp::prepareSettings( Settings *settings )
 {
     // use MouseEvent simulation on iOS:
-    settings->enableMultiTouch(false);
+//    settings->enableMultiTouch(false);
 }
 #endif
 

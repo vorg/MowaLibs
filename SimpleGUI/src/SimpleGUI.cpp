@@ -52,19 +52,27 @@ Vec2f SimpleGUI::sliderSize = Vec2f(125, 10);
 Vec2f SimpleGUI::labelSize = Vec2f(125, 10);
 Vec2f SimpleGUI::separatorSize = Vec2f(125, 1);
 	
-SimpleGUI::SimpleGUI(App* app) {
+SimpleGUI::SimpleGUI(AppNative* app) {
 	init(app);
 	enabled = true;
 }
 	
-void SimpleGUI::init(App* app) {	
+void SimpleGUI::init(AppNative* app) {	
 	textFont = Font(loadResource("pf_tempesta_seven.ttf"), 8);
 	//textFont = Font("Arial", 12);
     textureFont = gl::TextureFont::create( textFont );
-	selectedControl = NULL;
-	cbMouseDown = app->registerMouseDown( this, &SimpleGUI::onMouseDown );
-	cbMouseUp = app->registerMouseUp( this, &SimpleGUI::onMouseUp );	
-	cbMouseDrag = app->registerMouseDrag( this, &SimpleGUI::onMouseDrag );
+    if ( app->getSettings().isMultiTouchEnabled() ) {
+        selectedControls.clear();
+        cbTouchesBegan = app->registerTouchesBegan( this, &SimpleGUI::onTouchesBegan );
+        cbTouchesEnded = app->registerTouchesEnded( this, &SimpleGUI::onTouchesEnded );	
+        cbTouchesMoved = app->registerTouchesMoved( this, &SimpleGUI::onTouchesMoved );
+    }
+    else {
+        selectedControl = NULL;
+        cbMouseDown = app->registerMouseDown( this, &SimpleGUI::onMouseDown );
+        cbMouseUp   = app->registerMouseUp(   this, &SimpleGUI::onMouseUp   );	
+        cbMouseDrag = app->registerMouseDrag( this, &SimpleGUI::onMouseDrag );
+    }
 }
 
 FloatVarControl* SimpleGUI::addParam(const std::string& paramName, float* var, float min, float max, float defaultValue) {
@@ -238,43 +246,97 @@ void SimpleGUI::load(std::string fileName) {
 	}    
 	file_op.close();
 }
-	
 
 bool SimpleGUI::onMouseDown(MouseEvent event) {
-	if (!enabled) return false;
-	
-	std::vector<Control*>::iterator it = controls.begin();	
-	while(it != controls.end()) {
-		Control* control = *it++;
-		if (control->activeArea.contains(event.getPos())) {
-			selectedControl = control;
-			selectedControl->onMouseDown(event);	
-			return true;
-		}
-	}	
-	return false;
+    if (!enabled) return false;
+    
+    std::vector<Control*>::iterator it = controls.begin();	
+    while(it != controls.end()) {
+        Control* control = *it++;
+        if (control->activeArea.contains(event.getPos())) {
+            selectedControl = control;
+            selectedControl->onMouseDown(event);	
+            return true;
+        }
+    }	
+    return false;
 }
 
 bool SimpleGUI::onMouseUp(MouseEvent event) {
+    if (!enabled) return false;
+    
+    if (selectedControl != NULL) {
+        selectedControl->onMouseUp(event);
+        selectedControl = NULL;
+        return true;
+    }	
+    return false;
+}
+
+bool SimpleGUI::onMouseDrag(MouseEvent event) {
+    if (!enabled) return false;
+    
+    mousePos = event.getPos();
+    
+    if (selectedControl) {
+        selectedControl->onMouseDrag(event);
+        return true;
+    }
+    return false;
+}
+
+
+bool SimpleGUI::onTouchesBegan(TouchEvent event) {
 	if (!enabled) return false;
 	
-	if (selectedControl != NULL) {
-		selectedControl->onMouseUp(event);
-		selectedControl = NULL;
-		return true;
-	}	
+    std::vector<TouchEvent::Touch> touches = event.getTouches();
+    std::vector<TouchEvent::Touch>::iterator touchIt = touches.begin();
+    while(touchIt != touches.end()) {
+        TouchEvent::Touch touch = *touchIt++;
+        std::vector<Control*>::iterator it = controls.begin();	
+        while(it != controls.end()) {
+            Control* control = *it++;
+            if (control->activeArea.contains(touch.getPos())) {
+                selectedControls[touch.getId()] = control;
+                control->onTouchBegan(touch);	
+                // TODO: can touch be removed from touches?
+                // can't return false because not all touches belong to SimpleGUI
+            }
+        }	
+    }
+	return false;
+}
+
+bool SimpleGUI::onTouchesEnded(TouchEvent event) {
+	if (!enabled || selectedControls.size() == 0) return false;
+	
+    std::vector<TouchEvent::Touch> touches = event.getTouches();
+    std::vector<TouchEvent::Touch>::iterator touchIt = touches.begin();
+    while(touchIt != touches.end()) {
+        TouchEvent::Touch touch = *touchIt++;
+        if (selectedControls.find(touch.getId()) != selectedControls.end()) {
+            selectedControls[touch.getId()]->onTouchEnded(touch);
+            selectedControls.erase(touch.getId());
+            // TODO: can touch be removed from touches?
+            // can't return false because not all touches belong to SimpleGUI            
+        }
+    }
 	return false;
 }
 	
-bool SimpleGUI::onMouseDrag(MouseEvent event) {
-	if (!enabled) return false;
+bool SimpleGUI::onTouchesMoved(TouchEvent event) {
+	if (!enabled || selectedControls.size() == 0) return false;
 	
-	mousePos = event.getPos();
-	
-	if (selectedControl) {
-		selectedControl->onMouseDrag(event);
-		return true;
-	}
+    std::vector<TouchEvent::Touch> touches = event.getTouches();
+    std::vector<TouchEvent::Touch>::iterator touchIt = touches.begin();
+    while(touchIt != touches.end()) {
+        TouchEvent::Touch touch = *touchIt++;
+        if (selectedControls.find(touch.getId()) != selectedControls.end()) {
+            selectedControls[touch.getId()]->onTouchMoved(touch);
+            // TODO: can touch be removed from touches?
+            // can't return false because not all touches belong to SimpleGUI            
+        }
+    }    
 	return false;
 }
 	
@@ -386,13 +448,23 @@ void FloatVarControl::fromString(std::string& strValue) {
 }
 	
 void FloatVarControl::onMouseDown(MouseEvent event) {
-	onMouseDrag(event);	
+    onMouseDrag(event);	
 }
 
 void FloatVarControl::onMouseDrag(MouseEvent event) {
-	float value = (event.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
-	value = math<float>::max(0.0, math<float>::min(value, 1.0));	
-	setNormalizedValue(value);
+    float value = (event.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
+    value = math<float>::max(0.0, math<float>::min(value, 1.0));	
+    setNormalizedValue(value);
+}
+
+void FloatVarControl::onTouchBegan(TouchEvent::Touch touch) {
+    onTouchMoved(touch);	
+}
+
+void FloatVarControl::onTouchMoved(TouchEvent::Touch touch) {
+    float value = (touch.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
+    value = math<float>::max(0.0, math<float>::min(value, 1.0));	
+    setNormalizedValue(value);
 }
 	
 //-----------------------------------------------------------------------------
@@ -466,15 +538,25 @@ void IntVarControl::fromString(std::string& strValue) {
 }
 
 void IntVarControl::onMouseDown(MouseEvent event) {
-	onMouseDrag(event);
+    onMouseDrag(event);
 }
-	
+
 void IntVarControl::onMouseDrag(MouseEvent event) {
-	float value = (event.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
-	value = math<float>::max(0.0, math<float>::min(value, 1.0));	
-	setNormalizedValue(value);
+    float value = (event.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
+    value = math<float>::max(0.0, math<float>::min(value, 1.0));	
+    setNormalizedValue(value);
 }
-	
+
+void IntVarControl::onTouchBegan(TouchEvent::Touch touch) {
+    onTouchMoved(touch);
+}
+
+void IntVarControl::onTouchMoved(TouchEvent::Touch touch) {
+    float value = (touch.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
+    value = math<float>::max(0.0, math<float>::min(value, 1.0));	
+    setNormalizedValue(value);
+}
+
 //-----------------------------------------------------------------------------
 	
 BoolVarControl::BoolVarControl(const std::string& name, bool* var, bool defaultValue, int groupId) {
@@ -513,7 +595,7 @@ void BoolVarControl::fromString(std::string& strValue) {
 	int value = boost::lexical_cast<int>(strValue);	
 	*var = value ? true : false;
 }
-	
+
 void BoolVarControl::onMouseDown(MouseEvent event) {
 	if (groupId > -1) {
 		for(std::vector<Control*>::iterator it2 = parentGui->getControls().begin(); it2 != parentGui->getControls().end(); it2++) {
@@ -526,7 +608,21 @@ void BoolVarControl::onMouseDown(MouseEvent event) {
 		*this->var = ! *this->var;
 	}
 }
-	
+
+void BoolVarControl::onTouchBegan(TouchEvent::Touch touch) {
+    // TODO: common function for onTouchBegan and onMouseDown
+	if (groupId > -1) {
+		for(std::vector<Control*>::iterator it2 = parentGui->getControls().begin(); it2 != parentGui->getControls().end(); it2++) {
+			if (((*it2)->type == Control::BOOL_VAR) && (((BoolVarControl*)(*it2))->groupId == this->groupId)) {
+				*((BoolVarControl*)(*it2))->var = (*it2 == this);
+			}						
+		}
+	}
+	else {
+		*this->var = ! *this->var;
+	}
+}
+
 //-----------------------------------------------------------------------------
 
 ColorVarControl::ColorVarControl(const std::string& name, ColorA* var, ColorA defaultValue, int colorModel) {
@@ -671,7 +767,49 @@ void ColorVarControl::onMouseDrag(MouseEvent event) {
 		*var = ColorA(CM_HSV, hsv.x, hsv.y, hsv.z, var->a);
 	}
 }
+
+void ColorVarControl::onTouchBegan(TouchEvent::Touch touch) {	
+    // TODO: common function for onMouseDown and onTouchBegan
+    // TODO: or do activeTrack by touchId so you can drag multiple tracks
+	if (activeArea1.contains(touch.getPos())) {
+		activeTrack = 1;
+	}
+	else if (activeArea2.contains(touch.getPos())) {
+		activeTrack = 2;
+	}
+	else if (activeArea3.contains(touch.getPos())) {
+		activeTrack = 3;
+	}
+	else if (activeArea4.contains(touch.getPos())) {
+		activeTrack = 4;
+	}
+	onTouchMoved(touch);
+}
+
+void ColorVarControl::onTouchMoved(TouchEvent::Touch touch) {	
+	float value = (touch.getPos().x - activeArea.x1)/(activeArea.x2 - activeArea.x1);
+	value = math<float>::max(0.0, math<float>::min(value, 1.0));	
 	
+	if (colorModel == SimpleGUI::RGB) {
+		switch (activeTrack) {
+			case 1: var->r = value; break;
+			case 2: var->g = value; break;
+			case 3: var->b = value; break;
+			case 4: var->a = value; break;				
+		}
+	}
+	else {
+		Vec3f hsv = rgbToHSV(*var);
+		switch (activeTrack) {
+			case 1: hsv.x = value; break;
+			case 2: hsv.y = value; break;
+			case 3: hsv.z = value; break;
+			case 4: var->a = value; break;				
+		}
+		*var = ColorA(CM_HSV, hsv.x, hsv.y, hsv.z, var->a);
+	}
+}
+
 //-----------------------------------------------------------------------------	
 	
 ButtonControl::ButtonControl(const std::string& name) {
@@ -723,6 +861,16 @@ void ButtonControl::fireClick() {
 		handled = (cbIter->second)( event );
 	}
 }
+
+void ButtonControl::onTouchBegan(TouchEvent::Touch touch) {
+	pressed = true;
+	fireClick();
+}
+
+void ButtonControl::onTouchEnded(TouchEvent::Touch touch) {
+	pressed = false;	
+}
+
 
 //-----------------------------------------------------------------------------	
 

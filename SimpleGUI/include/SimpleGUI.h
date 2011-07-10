@@ -28,7 +28,7 @@
 #pragma once
 
 #include <vector>
-#include "cinder/app/App.h"
+#include "cinder/app/AppNative.h"
 #include "cinder/Text.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/TextureFont.h"
@@ -60,12 +60,16 @@ private:
 	Vec2f	mousePos;
 	std::vector<Control*> controls;
 	Control* selectedControl;
+    std::map<uint64_t, Control*> selectedControls; // for multitouch
 	
 	CallbackId	cbMouseDown;
 	CallbackId	cbMouseUp;
 	CallbackId  cbMouseDrag;	
+	CallbackId	cbTouchesBegan;
+	CallbackId	cbTouchesEnded;
+	CallbackId  cbTouchesMoved;	
 
-	void	init(App* app);	
+	void	init(AppNative* app);	
 public:
 	static ColorA darkColor;
 	static ColorA lightColor;
@@ -85,13 +89,16 @@ public:
 		HSV
 	};
 public:
-	SimpleGUI(App* app);
-	bool	isSelected() { return selectedControl != NULL; }
+	SimpleGUI(AppNative* app);
+	bool	isSelected() { return selectedControl != NULL || !selectedControls.empty(); }
 	std::vector<Control*>& getControls() { return controls; }	
 	
 	bool	onMouseDown(MouseEvent event);
 	bool	onMouseUp(MouseEvent event);
 	bool	onMouseDrag(MouseEvent event);
+	bool	onTouchesBegan(TouchEvent event);
+	bool	onTouchesEnded(TouchEvent event);
+	bool	onTouchesMoved(TouchEvent event);
 	
 	void	draw();
 	void	dump();
@@ -154,6 +161,9 @@ public:
 	virtual void onMouseDown(MouseEvent event) {};
 	virtual void onMouseUp(MouseEvent event) {};
 	virtual void onMouseDrag(MouseEvent event) {};
+	virtual void onTouchBegan(TouchEvent::Touch touch) {};
+	virtual void onTouchMoved(TouchEvent::Touch touch) {};
+	virtual void onTouchEnded(TouchEvent::Touch touch) {};
 };
 	
 //-----------------------------------------------------------------------------
@@ -172,6 +182,8 @@ public:
 	void fromString(std::string& strValue);
 	void onMouseDown(MouseEvent event);	
 	void onMouseDrag(MouseEvent event);
+	void onTouchBegan(TouchEvent::Touch touch);	
+	void onTouchMoved(TouchEvent::Touch touch);
 };
 	
 //-----------------------------------------------------------------------------
@@ -190,6 +202,8 @@ public:
 	void fromString(std::string& strValue);
 	void onMouseDown(MouseEvent event);	
 	void onMouseDrag(MouseEvent event);	
+	void onTouchBegan(TouchEvent::Touch touch);	
+	void onTouchMoved(TouchEvent::Touch touch);
 };
 	
 //-----------------------------------------------------------------------------
@@ -204,6 +218,7 @@ public:
 	std::string toString();	
 	void fromString(std::string& strValue);
 	void onMouseDown(MouseEvent event);
+	void onTouchBegan(TouchEvent::Touch touch);	
 };
 	
 //-----------------------------------------------------------------------------
@@ -224,6 +239,8 @@ public:
 	void fromString(std::string& strValue); //expecting "r g b a"
 	void onMouseDown(MouseEvent event);	
 	void onMouseDrag(MouseEvent event);
+	void onTouchBegan(TouchEvent::Touch touch);	
+	void onTouchMoved(TouchEvent::Touch touch);
 };
 	
 //-----------------------------------------------------------------------------
@@ -237,6 +254,8 @@ public:
 	Vec2f draw(Vec2f pos);
 	void onMouseDown(MouseEvent event);
 	void onMouseUp(MouseEvent event);
+	void onTouchBegan(TouchEvent::Touch touch);	
+	void onTouchEnded(TouchEvent::Touch touch);
 
 	//! Registers a callback for Click events. Returns a unique identifier which can be used as a parameter to unregisterClick().
 	CallbackId		registerClick( std::function<bool (MouseEvent)> callback ) { return callbacksClick.registerCb( callback ); }
