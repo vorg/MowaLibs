@@ -1,4 +1,4 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
 #include "SimpleGUI.h"
 #include <list>
 using namespace ci;
@@ -9,7 +9,7 @@ using namespace mowa::sgui;
 #define RENDER_TYPE_GROUP 1
 #define CONFIG_FILE "settings.sgui.txt"
 
-class BasicApp : public AppBasic {
+class BasicApp : public AppNative {
 private:
 	SimpleGUI* gui;
 	float rotation;
@@ -23,6 +23,9 @@ private:
 	float prevTime;
 	
 public:
+#if defined( CINDER_GLES )
+    void prepareSettings( Settings *settings );
+#endif
 	void mouseDown( MouseEvent event );
 	void mouseDrag( MouseEvent event );
 	void mouseUp( MouseEvent event );
@@ -30,6 +33,14 @@ public:
 	void draw();	
 	void setup();
 };
+
+#if defined( CINDER_GLES )
+void BasicApp::prepareSettings( Settings *settings )
+{
+    // use MouseEvent simulation on iOS:
+    settings->enableMultiTouch(false);
+}
+#endif
 
 void BasicApp::setup() {
 	gui = new SimpleGUI(this);
@@ -115,4 +126,4 @@ void BasicApp::draw() {
 }
 
 
-CINDER_APP_BASIC( BasicApp, RendererGl )
+CINDER_APP_NATIVE( BasicApp, RendererGl(0) )

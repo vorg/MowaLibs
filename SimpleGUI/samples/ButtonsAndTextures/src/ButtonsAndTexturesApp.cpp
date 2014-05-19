@@ -1,4 +1,4 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "SimpleGUI.h"
 
@@ -10,7 +10,7 @@ using namespace mowa::sgui;
 
 #define CONFIG_FILE "settings.sgui.txt"
 
-class ButtonsAndTexturesApp : public AppBasic {
+class ButtonsAndTexturesApp : public AppNative {
 private:
     SimpleGUI* gui;
     Timer timer;
@@ -23,6 +23,9 @@ private:
     TextureVarControl* screenshotTextureControl;
     gl::Texture screenshot;
 public:
+#if defined( CINDER_GLES )
+    void prepareSettings( Settings *settings );
+#endif    
 	void setup();
 	void mouseDown( MouseEvent event );	
     void keyDown( KeyEvent event );
@@ -31,6 +34,14 @@ public:
 	void update();
 	void draw();
 };
+
+#if defined( CINDER_GLES )
+void ButtonsAndTexturesApp::prepareSettings( Settings *settings )
+{
+    // use MouseEvent simulation on iOS:
+    settings->enableMultiTouch(false);
+}
+#endif
 
 void ButtonsAndTexturesApp::setup() {
     rotation = 0;
@@ -122,4 +133,4 @@ void ButtonsAndTexturesApp::draw(){
 }
 
 
-CINDER_APP_BASIC( ButtonsAndTexturesApp, RendererGl )
+CINDER_APP_NATIVE( ButtonsAndTexturesApp, RendererGl(0) )
